@@ -8,16 +8,16 @@ After many generations, you get a chaotic bunch of polygons that align into an i
 ![Screencap of sample output](../gh-pages/img/lena_200.gif?raw=true "Sample output")
 
 ### Example live demos:
-* [Create a projection](http://andyhall.github.io/glsl-image-maker/) (uncheck "Paused" to get started)
-* [View one I made earlier](http://andyhall.github.io/glsl-image-maker/viewer.html)
-* Or the [obligatory Mona Lisa](http://andyhall.github.io/glsl-image-maker/viewer_mona.html)
+* [Create a projection](http://andyhall.github.io/glsl-projectron/) (uncheck "Paused" to get started)
+* [View one I made earlier](http://andyhall.github.io/glsl-projectron/viewer.html)
+* Or the [obligatory Mona Lisa](http://andyhall.github.io/glsl-projectron/viewer_mona.html)
 
 Note that the creation process does its heavy lifting on the GPU (and then reads back the results), so it may not work on all video cards (definitely not mobile). Viewing a projection ought to work on any modern browser (and some devices).
 
 ## Installation & Usage
 
     git clone [this repo]
-    cd glsl-image-maker
+    cd glsl-projectron
     npm install
     npm start
 
@@ -25,7 +25,7 @@ That launches a local copy of the "Create" demo linked above. Alternately, doing
 
 To use the library directly:
 
-    var proj = require('path/to/glsl-image-maker/')
+    var proj = require('path/to/glsl-projectron/')
     proj.init( glReference, imageReference )
     //..
     proj.runGeneration()        // many times..
