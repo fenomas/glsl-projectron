@@ -4,3 +4,4 @@ node_modules/*
 example/bundle.js
 example/viewbundle.js
 *.dat
+*.sh
