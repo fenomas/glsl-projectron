@@ -21,7 +21,8 @@ var showReference = false
 var showScratch = false
 
 var gpuGenerationsPerFrame = 50
-var generationCount = 0
+var generationCount
+var lastTime, lastGen
 
 
 
@@ -48,7 +49,7 @@ shell.on('gl-init', function() {
 	// start loading target image - when loaded, init proj
 	var img = new Image()
 	img.onload = function() {
-		proj.init( shell.gl, img )
+		initProjectFromImage(img)
 	}
 	img.src = imagePath;
 })
@@ -61,6 +62,13 @@ shell.on("gl-error", function(e) {
 
 
 
+function initProjectFromImage( img ) {
+	proj.init( shell.gl, img )
+	generationCount = 0
+	lastTime = 0
+	lastGen = 0
+	updateHTML()
+}
 
 
 // on-tick and on-render functions
@@ -188,8 +196,6 @@ $('#maxA').on('change', setAlphas).val( proj.maxAlpha )
 
 
 // write out score, etc., on a suitable delay
-var lastTime = 0
-var lastGen = 0
 function updateHTML() {
 	var now = Date.now()
 	if (now-lastTime > htmlUpdateEvery) {
@@ -244,6 +250,28 @@ function updateCameraXY() {
 	cameraXY[1] += ease * (tgt[1] - cameraXY[1])
 }
 
+
+
+
+
+
+// *********   Experimental image drag/drop support? 	**********
+
+
+
+var dropTarget = document.body
+
+require("drag-and-drop-files")(dropTarget, function(files) {
+  var file = files[0]
+	console.log('experimental drag/drop support: attempting to use file: '+file)
+	var reader = new FileReader()
+	reader.onloadend = function(e) {
+		var img = new Image
+		img.src = e.target.result
+		initProjectFromImage( img )
+	}
+	reader.readAsDataURL(file)
+})
 
 
 
