@@ -20,7 +20,9 @@ Here is a [demo viewer of a previously made projection](). It's the bundled outp
     npm install
     npm start
 
-That launches the demo client, a web page that provides a UI to the core library. Alternately run `npm run viewer` to see a simple projection viewer, or `npm run bundle` to browserify the examples.
+That launches the demo client, a web page that provides a UI to the core library. (Uncheck "Paused" to get started.)
+
+Alternately run `npm run viewer` to see a simple projection viewer, or `npm run bundle` to browserify the examples.
 
 To use the library directly:
 

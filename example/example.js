@@ -7,7 +7,7 @@
 
 // imports
 var $ = window.$ = require('browserify-zepto')
-var proj = require('../index.js')
+var proj = require('../')
 
 
 
