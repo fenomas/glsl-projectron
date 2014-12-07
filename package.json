@@ -1,0 +1,43 @@
+{
+  "name": "tbd",
+  "version": "0.0.1",
+  "description": "TBD",
+  "main": "index.js",
+  "scripts": {
+    "start": "beefy example/example.js:bundle.js --cwd example --index=example/maker.html --live --open",
+    "maker": "beefy example/example.js:bundle.js --cwd example --index=example/maker.html --live --open",
+    "viewer": "beefy example/viewer.js:viewbundle.js 8080 --cwd example --index=example/viewer.html --live --open",
+    "bundle": "browserify example/example.js > example/bundle.js & browserify example/viewer.js > example/viewbundle.js",
+    "test": "beefy test/test.js 8080 --cwd test --live --open"
+  },
+  "author": "andy",
+  "license": "tbd",
+  "browserify": {
+    "transform": [
+      "glslify"
+    ]
+  },
+  "dependencies": {
+    "gl-buffer": "^2.1.1",
+    "gl-fbo": "^2.0.3",
+    "gl-mat4": "^1.0.0",
+    "gl-texture2d": "^2.0.8",
+    "gl-vao": "^1.2.0",
+    "glslify": "^1.6.0"
+  },
+  "devDependencies": {
+    "gl-now": "^1.4.0",
+    "beefy": "^2.1.1",
+    "browserify": "^6.2.0",
+    "browserify-zepto": "^1.1.4",
+    "tap-browser-color": "^0.1.2",
+    "tape": "^3.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "~/dev/game/.git"
+  },
+  "keywords": [
+    "tbd"
+  ]
+}
