@@ -424,8 +424,8 @@ function importData(s) {
 	var curr, v=[], c=[]
 	var arr = s.split(',')
 	arr.forEach(function(s) {
-		if (s=="vert-xyz") { curr = v }
-		else if (s=="col-rgba") { curr = c }
+		if (s.indexOf('vert-xyz') > -1) { curr = v }
+		else if (s.indexOf('col-rgba') > -1) { curr = c }
 		else {
 			curr.push( parseFloat(s) )
 		}
