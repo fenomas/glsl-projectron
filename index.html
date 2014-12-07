@@ -1,154 +1,88 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8">
+		<title>Projected image creator</title>
+		<meta name="description" content="viewer">
+		<style type="text/css">
+			body {
+				font-family: 	sans-serif;
+				font-size: 		9pt;
+				line-height: 	16pt;
+			}
+			#container {
+				float: 	left; 
+				width: 	500px;
+				height: 500px;
+			}
+			
+			#data {
+				width: 	200px;
+				height: 60px;
+			}
+			.txt  { 	width: 	60px;  }
+			.txts {
+				width: 				40px;
+				text-align: 	center;
+			}
+		</style>
+	</head>
+	<body>
 
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Glsl-image-maker : A GPU demo that genetically(?) creates 3D data which projects into a given target image">
+		<div id='container'></div>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+		<label> <input type='checkbox' id='paused'/> Paused </label>
+		<br>
+		<label> <input type='checkbox' id='useGPU'/> Compare on GPU </label>
+		<br>
+		<label><select id='gensPerFrame'>
+			<option>1</option>
+			<option>10</option>
+			<option>20</option>
+			<option>50</option>
+			<option>100</option>
+			</select> generations per frame
+		</label>
+		
+		<br>
+		<label><select id='fewerPolys'>
+			<option selected='true'>Don't</option>
+			<option>Slightly</option>
+			<option>Somewhat</option>
+			<option>Moderately</option>
+			<option>Strongly</option>
+			</select> prefer fewer polys
+		</label>
+		<br>
+		<label> <input type='checkbox' id='flat'/> Flat polys </label>
+		<br>
+		Alphas <input class='txts' id='minA'> to <input class='txts' id='maxA'>
+		
+		<br><br>
+		<label><input type='checkbox' id='showRef' /> Show reference </label>
+		<br>
+		<label><input type='checkbox' id='showScr' /> Scratch buffer </label>
 
-    <title>Glsl-image-maker</title>
-  </head>
+		<br><br>
+		<input class='txt' id='polys'> Polygons
+		<br>
+		<input class='txt' id='score'> Score
+		<br>
+		<input class='txt' id='gens'> Generations
+		<br>
+		<input class='txt' id='gps'> Gens/s
+		
 
-  <body>
+		<br><br>
+		<button id='export'>Export vert/color data ↓</button>
+		<br>
+		<textarea id='data'></textarea>
+		<br>
+		<button id='import'>Import vert/color data ↑</button>
+		
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/andyhall/glsl-image-maker">View on GitHub</a>
 
-          <h1 id="project_title">Glsl-image-maker</h1>
-          <h2 id="project_tagline">A GPU demo that genetically(?) creates 3D data which projects into a given target image</h2>
+		<script src="bundle.js"></script>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/andyhall/glsl-image-maker/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/andyhall/glsl-image-maker/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a id="glsl-image-maker" class="anchor" href="#glsl-image-maker" aria-hidden="true"><span class="octicon octicon-link"></span></a>glsl-image-maker</h1>
-
-<p>This is a WebGL/<a href="http://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units">GPGPU</a> demo I made to teach myself shader programming. It generates random 3D polygons which resemble a given target image when projected. Basically it's the concept from <a href="http://rogeralsing.com/2008/12/07/genetic-programming-evolution-of-mona-lisa/">this blog post</a>, but done in 3D and on the GPU.</p>
-
-<p>[image]</p>
-
-<p>An explanatory blog post will be up shortly.</p>
-
-<h3>
-<a id="live-demos" class="anchor" href="#live-demos" aria-hidden="true"><span class="octicon octicon-link"></span></a>Live demos:</h3>
-
-<p>Here is the <a href="">example client for creating a projection</a>. It's the same thing you'd get by running <code>npm start</code> on the module. Note that this project compares images on the GPU and reads back the results, which I assume won't work on some (older?) video cards.</p>
-
-<p>Here is a <a href="">demo viewer of a previously made projection</a>. It's the bundled output of <code>npm run viewer</code>.</p>
-
-<h2>
-<a id="installation--usage" class="anchor" href="#installation--usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation &amp; Usage</h2>
-
-<pre><code>git clone [this repo]
-cd glsl-image-maker
-npm install
-npm start
-</code></pre>
-
-<p>That launches the demo client, a web page that provides a UI to the core library. Alternately run <code>npm run viewer</code> to see a simple projection viewer, or <code>npm run bundle</code> to browserify the examples.</p>
-
-<p>To use the library directly:</p>
-
-<pre><code>var proj = require('path/to/glsl-image-maker/')
-proj.init( glReference, imageReference )
-</code></pre>
-
-<h2>
-<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
-
-<h4>
-<a id="init-glref-imageref-size" class="anchor" href="#init-glref-imageref-size" aria-hidden="true"><span class="octicon octicon-link"></span></a>init (glRef, imageRef, size)</h4>
-
-<ul>
-<li>gl object of the canvas you'll use for output</li>
-<li>[optional] source image (an HTML Image object)</li>
-<li>[optional] resolution of the framebuffer used internally for comparison (default 256)</li>
-</ul>
-
-<p>If no image is supplied, the library will initialize but assume you're going to use it to display data that was already created. (So calls to e.g. <code>runGeneration()</code> will fail.)</p>
-
-<h4>
-<a id="rungeneration" class="anchor" href="#rungeneration" aria-hidden="true"><span class="octicon octicon-link"></span></a>runGeneration()</h4>
-
-<p>Runs one generation of the genetic(?) algorithm - mutating the internal data and keeping the result if it scores higher than the previous version.</p>
-
-<h4>
-<a id="paint-xrot-yrot-" class="anchor" href="#paint-xrot-yrot-" aria-hidden="true"><span class="octicon octicon-link"></span></a>paint( xRot, yRot )</h4>
-
-<p>Paints the current best data to the gl context. Optionally takes x- and y-rotation [Euler] angles.</p>
-
-<h4>
-<a id="paintreference" class="anchor" href="#paintreference" aria-hidden="true"><span class="octicon octicon-link"></span></a>paintReference()</h4>
-
-<p>Paints the reference framebuffer to the gl context (this may differ from the reference image in resolution)</p>
-
-<h4>
-<a id="paintscratchbuffer" class="anchor" href="#paintscratchbuffer" aria-hidden="true"><span class="octicon octicon-link"></span></a>paintScratchBuffer()</h4>
-
-<p>Paints the internal comparison framebuffer</p>
-
-<h4>
-<a id="exportdata" class="anchor" href="#exportdata" aria-hidden="true"><span class="octicon octicon-link"></span></a>exportData()</h4>
-
-<p>Exports the current polygon data, in an extremely dumb ad-hoc string format.</p>
-
-<h4>
-<a id="importdatastr" class="anchor" href="#importdatastr" aria-hidden="true"><span class="octicon octicon-link"></span></a>importData(str)</h4>
-
-<p>Imports data in the same ad-hoc format as above.</p>
-
-<h4>
-<a id="score" class="anchor" href="#score" aria-hidden="true"><span class="octicon octicon-link"></span></a>score</h4>
-
-<p>(read only) Returns the score (fitness) of the current data. Scales roughly from -100 to 100.</p>
-
-<h4>
-<a id="numpolys" class="anchor" href="#numpolys" aria-hidden="true"><span class="octicon octicon-link"></span></a>numPolys</h4>
-
-<p>(read only) Number of polygons (triangles) currently used</p>
-
-<h4>
-<a id="minalpha--maxalpha" class="anchor" href="#minalpha--maxalpha" aria-hidden="true"><span class="octicon octicon-link"></span></a>minAlpha / maxAlpha</h4>
-
-<p>(defaults 0.05, 0.5) Min/max values the algorithm will use when randomizing any vertex's alpha value. I found that setting these moderately low (e.g. .1 to .5) made images get more interesting more quickly than just using the range 0..1.</p>
-
-<h4>
-<a id="compareongpu" class="anchor" href="#compareongpu" aria-hidden="true"><span class="octicon octicon-link"></span></a>compareonGPU</h4>
-
-<p>(default true) Flag for whether to use the GPU when comparing rendered images to the target image. Turning this off will slow things down a lot.</p>
-
-<h4>
-<a id="fewerpolystolerance" class="anchor" href="#fewerpolystolerance" aria-hidden="true"><span class="octicon octicon-link"></span></a>fewerPolysTolerance</h4>
-
-<p>(default 0) A tolerance within which the algorithm will accept generations with a lower score as long as they have fewer polygons than the previous. </p>
-
-<h4>
-<a id="useflatpolys" class="anchor" href="#useflatpolys" aria-hidden="true"><span class="octicon octicon-link"></span></a>useFlatPolys</h4>
-
-<p>(default false) When set, all new polygons will share a common z value (i.e. they will be parallel to the camera plane). I thought this might make for interesting visuals, but didn't get anywhere with it.</p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Glsl-image-maker maintained by <a href="https://github.com/andyhall">andyhall</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
+	</body>
 </html>
