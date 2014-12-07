@@ -9,9 +9,9 @@ An explanatory blog post will be up shortly.
 
 ### Live demos:
 
-Here is the [example client for creating a projection](). It's the same thing you'd get by running `npm start` on the module. Note that this project compares images on the GPU and reads back the results, which I assume won't work on some (older?) video cards.
+Here is the [example client for creating a projection](http://andyhall.github.io/glsl-image-maker/). It's the same thing you'd get by running `npm start` on the module. Note that this project compares images on the GPU and reads back the results, which I assume won't work on some (older?) video cards.
 
-Here is a [demo viewer of a previously made projection](). It's the bundled output of `npm run viewer`.
+Here is a [demo viewer of a previously made projection](http://andyhall.github.io/glsl-image-maker/viewer.html). It's the bundled output of `npm run viewer`.
 
 ## Installation & Usage
 
