@@ -1,7 +1,9 @@
 {
-  "name": "tbd",
+  "name": "glsl-projectron",
   "version": "0.0.1",
-  "description": "TBD",
+  "description": "A GPU demo that evolves 3D data which projects to a given target image",
+  "author": "Andy Hall",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "start": "beefy example/example.js:bundle.js --cwd example --index=example/maker.html --live --open",
@@ -10,8 +12,6 @@
     "bundle": "browserify example/example.js > example/bundle.js & browserify example/viewer.js > example/viewbundle.js",
     "test": "beefy test/test.js 8080 --cwd test --live --open"
   },
-  "author": "andy",
-  "license": "tbd",
   "browserify": {
     "transform": [
       "glslify"
@@ -26,18 +26,22 @@
     "glslify": "^1.6.0"
   },
   "devDependencies": {
-    "gl-now": "^1.4.0",
     "beefy": "^2.1.1",
     "browserify": "^6.2.0",
     "browserify-zepto": "^1.1.4",
+    "drag-and-drop-files": "0.0.1",
+    "gl-now": "^1.4.0",
     "tap-browser-color": "^0.1.2",
     "tape": "^3.0.3"
   },
   "repository": {
     "type": "git",
-    "url": "~/dev/game/.git"
+    "url": "https://github.com/andyhall/glsl-projectron.git"
+  },
+	"bugs": {
+    "url": "https://github.com/andyhall/glsl-projectron/issues"
   },
   "keywords": [
-    "tbd"
+    "GLSL", "GPGPU", "image", "projection"
   ]
 }

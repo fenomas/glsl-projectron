@@ -1,4 +1,4 @@
-glsl-image-maker
+GLSL-Projectron
 ================
 
 This is a WebGL/[GPGPU](http://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units) demo I made to teach myself shader programming. It generates (genetically?[*](#note)) random 3D polygons which resemble a given target image when projected. Basically it's the concept from [this blog post][alsing], but done in 3D and on the GPU.
