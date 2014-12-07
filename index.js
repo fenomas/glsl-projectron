@@ -14,8 +14,8 @@ var perspective = 0.2
 var compareonGPU = true
 var keepFewerPolysTolerance = 0
 
-var minAlpha = .1
-var maxAlpha = .7
+var minAlpha = .05
+var maxAlpha = .5
 
 var useFlatPolys = false
 
