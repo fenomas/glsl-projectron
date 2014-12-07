@@ -22,7 +22,8 @@ var showReference = false
 var showScratch = false
 
 var gpuGenerationsPerFrame = 50
-var generationCount = 0
+var generationCount
+var lastTime, lastGen
 
 
 
@@ -49,7 +50,7 @@ shell.on('gl-init', function() {
 	// start loading target image - when loaded, init proj
 	var img = new Image()
 	img.onload = function() {
-		proj.init( shell.gl, img )
+		initProjectFromImage(img)
 	}
 	img.src = imagePath;
 })
@@ -62,6 +63,13 @@ shell.on("gl-error", function(e) {
 
 
 
+function initProjectFromImage( img ) {
+	proj.init( shell.gl, img )
+	generationCount = 0
+	lastTime = 0
+	lastGen = 0
+	updateHTML()
+}
 
 
 // on-tick and on-render functions
@@ -189,8 +197,6 @@ $('#maxA').on('change', setAlphas).val( proj.maxAlpha )
 
 
 // write out score, etc., on a suitable delay
-var lastTime = 0
-var lastGen = 0
 function updateHTML() {
 	var now = Date.now()
 	if (now-lastTime > htmlUpdateEvery) {
@@ -249,7 +255,29 @@ function updateCameraXY() {
 
 
 
-},{"../":2,"browserify-zepto":3,"gl-now":52}],2:[function(require,module,exports){
+
+// *********   Experimental image drag/drop support? 	**********
+
+
+
+var dropTarget = document.body
+
+require("drag-and-drop-files")(dropTarget, function(files) {
+  var file = files[0]
+	console.log('experimental drag/drop support: attempting to use file: '+file)
+	var reader = new FileReader()
+	reader.onloadend = function(e) {
+		var img = new Image
+		img.src = e.target.result
+		initProjectFromImage( img )
+	}
+	reader.readAsDataURL(file)
+})
+
+
+
+
+},{"../":2,"browserify-zepto":3,"drag-and-drop-files":13,"gl-now":53}],2:[function(require,module,exports){
 "use strict";
 var perspective = 0.2;
 var compareonGPU = true;
@@ -675,7 +703,7 @@ Object.defineProperty(proj, "maxAlpha", {
 });
 
 module.exports = proj;
-},{"./polydata":91,"gl-buffer":13,"gl-fbo":26,"gl-mat4":38,"gl-texture2d":77,"gl-vao":83,"glslify":85,"glslify/adapter.js":84}],3:[function(require,module,exports){
+},{"./polydata":92,"gl-buffer":14,"gl-fbo":27,"gl-mat4":39,"gl-texture2d":78,"gl-vao":84,"glslify":86,"glslify/adapter.js":85}],3:[function(require,module,exports){
 /* Zepto v1.1.4 - zepto event ajax form ie - zeptojs.com/license */
 
 var Zepto = module.exports = (function() {
@@ -4569,6 +4597,28 @@ function hasOwnProperty(obj, prop) {
 },{"./support/isBuffer":11,"_process":10,"inherits":9}],13:[function(require,module,exports){
 "use strict"
 
+function handleDrop(callback, event) {
+  event.stopPropagation()
+  event.preventDefault()
+  callback(Array.prototype.slice.call(event.dataTransfer.files))
+}
+
+function killEvent(e) {
+  e.stopPropagation()
+  e.preventDefault()
+  return false
+}
+
+function addDragDropListener(element, callback) {
+  element.addEventListener("dragenter", killEvent, false)
+  element.addEventListener("dragover", killEvent, false)
+  element.addEventListener("drop", handleDrop.bind(undefined, callback), false)
+}
+
+module.exports = addDragDropListener
+},{}],14:[function(require,module,exports){
+"use strict"
+
 var pool = require("typedarray-pool")
 var ops = require("ndarray-ops")
 var ndarray = require("ndarray")
@@ -4722,7 +4772,7 @@ function createBuffer(gl, data, type, usage) {
 }
 
 module.exports = createBuffer
-},{"ndarray":19,"ndarray-ops":14,"typedarray-pool":23,"webglew":25}],14:[function(require,module,exports){
+},{"ndarray":20,"ndarray-ops":15,"typedarray-pool":24,"webglew":26}],15:[function(require,module,exports){
 "use strict"
 
 var compile = require("cwise-compiler")
@@ -5185,7 +5235,7 @@ exports.equals = compile({
 
 
 
-},{"cwise-compiler":15}],15:[function(require,module,exports){
+},{"cwise-compiler":16}],16:[function(require,module,exports){
 "use strict"
 
 var createThunk = require("./lib/thunk.js")
@@ -5293,7 +5343,7 @@ function compileCwise(user_args) {
 
 module.exports = compileCwise
 
-},{"./lib/thunk.js":17}],16:[function(require,module,exports){
+},{"./lib/thunk.js":18}],17:[function(require,module,exports){
 "use strict"
 
 var uniq = require("uniq")
@@ -5581,7 +5631,7 @@ function generateCWiseOp(proc, typesig) {
   return f()
 }
 module.exports = generateCWiseOp
-},{"uniq":18}],17:[function(require,module,exports){
+},{"uniq":19}],18:[function(require,module,exports){
 "use strict"
 
 var compile = require("./compile.js")
@@ -5630,7 +5680,7 @@ function createThunk(proc) {
 
 module.exports = createThunk
 
-},{"./compile.js":16}],18:[function(require,module,exports){
+},{"./compile.js":17}],19:[function(require,module,exports){
 "use strict"
 
 function unique_pred(list, compare) {
@@ -5689,7 +5739,7 @@ function unique(list, compare, sorted) {
 
 module.exports = unique
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function (Buffer){
 var iota = require("iota-array")
 
@@ -6037,7 +6087,7 @@ function wrappedNDArrayCtor(data, shape, stride, offset) {
 
 module.exports = wrappedNDArrayCtor
 }).call(this,require("buffer").Buffer)
-},{"buffer":4,"iota-array":20}],20:[function(require,module,exports){
+},{"buffer":4,"iota-array":21}],21:[function(require,module,exports){
 "use strict"
 
 function iota(n) {
@@ -6049,7 +6099,7 @@ function iota(n) {
 }
 
 module.exports = iota
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /**
  * Bit twiddling hacks for JavaScript.
  *
@@ -6255,7 +6305,7 @@ exports.nextCombination = function(v) {
 }
 
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict"
 
 function dupe_array(count, value, i) {
@@ -6305,7 +6355,7 @@ function dupe(count, value) {
 }
 
 module.exports = dupe
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 (function (global,Buffer){
 'use strict'
 
@@ -6522,7 +6572,7 @@ exports.clearCache = function clearCache() {
   }
 }
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"bit-twiddle":21,"buffer":4,"dup":22}],24:[function(require,module,exports){
+},{"bit-twiddle":22,"buffer":4,"dup":23}],25:[function(require,module,exports){
 // Copyright (C) 2011 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -7209,7 +7259,7 @@ exports.clearCache = function clearCache() {
   }
 })();
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict'
 
 var weakMap = typeof WeakMap === 'undefined' ? require('weak-map') : WeakMap
@@ -7251,7 +7301,7 @@ function initWebGLEW(gl) {
   return extensions
 }
 module.exports = initWebGLEW
-},{"weak-map":24}],26:[function(require,module,exports){
+},{"weak-map":25}],27:[function(require,module,exports){
 'use strict'
 
 var webglew = require('webglew')
@@ -7720,11 +7770,11 @@ function createFBO(gl, width, height, options) {
     useStencil, 
     extensions.WEBGL_draw_buffers)
 }
-},{"gl-texture2d":77,"webglew":28}],27:[function(require,module,exports){
-module.exports=require(24)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/node_modules/weak-map/weak-map.js":24}],28:[function(require,module,exports){
+},{"gl-texture2d":78,"webglew":29}],28:[function(require,module,exports){
 module.exports=require(25)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/webglew.js":25,"weak-map":27}],29:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/node_modules/weak-map/weak-map.js":25}],29:[function(require,module,exports){
+module.exports=require(26)
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/webglew.js":26,"weak-map":28}],30:[function(require,module,exports){
 module.exports = adjoint;
 
 /**
@@ -7758,7 +7808,7 @@ function adjoint(out, a) {
     out[15] =  (a00 * (a11 * a22 - a12 * a21) - a10 * (a01 * a22 - a02 * a21) + a20 * (a01 * a12 - a02 * a11));
     return out;
 };
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 module.exports = clone;
 
 /**
@@ -7787,7 +7837,7 @@ function clone(a) {
     out[15] = a[15];
     return out;
 };
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 module.exports = copy;
 
 /**
@@ -7816,7 +7866,7 @@ function copy(out, a) {
     out[15] = a[15];
     return out;
 };
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 module.exports = create;
 
 /**
@@ -7844,7 +7894,7 @@ function create() {
     out[15] = 1;
     return out;
 };
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 module.exports = determinant;
 
 /**
@@ -7875,7 +7925,7 @@ function determinant(a) {
     // Calculate the determinant
     return b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
 };
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 module.exports = fromQuat;
 
 /**
@@ -7923,7 +7973,7 @@ function fromQuat(out, q) {
 
     return out;
 };
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 module.exports = fromRotationTranslation;
 
 /**
@@ -7977,7 +8027,7 @@ function fromRotationTranslation(out, q, v) {
     
     return out;
 };
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 module.exports = frustum;
 
 /**
@@ -8014,7 +8064,7 @@ function frustum(out, left, right, bottom, top, near, far) {
     out[15] = 0;
     return out;
 };
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 module.exports = identity;
 
 /**
@@ -8042,7 +8092,7 @@ function identity(out) {
     out[15] = 1;
     return out;
 };
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 module.exports = {
   create: require('./create')
   , clone: require('./clone')
@@ -8067,7 +8117,7 @@ module.exports = {
   , lookAt: require('./lookAt')
   , str: require('./str')
 }
-},{"./adjoint":29,"./clone":30,"./copy":31,"./create":32,"./determinant":33,"./fromQuat":34,"./fromRotationTranslation":35,"./frustum":36,"./identity":37,"./invert":39,"./lookAt":40,"./multiply":41,"./ortho":42,"./perspective":43,"./rotate":44,"./rotateX":45,"./rotateY":46,"./rotateZ":47,"./scale":48,"./str":49,"./translate":50,"./transpose":51}],39:[function(require,module,exports){
+},{"./adjoint":30,"./clone":31,"./copy":32,"./create":33,"./determinant":34,"./fromQuat":35,"./fromRotationTranslation":36,"./frustum":37,"./identity":38,"./invert":40,"./lookAt":41,"./multiply":42,"./ortho":43,"./perspective":44,"./rotate":45,"./rotateX":46,"./rotateY":47,"./rotateZ":48,"./scale":49,"./str":50,"./translate":51,"./transpose":52}],40:[function(require,module,exports){
 module.exports = invert;
 
 /**
@@ -8123,7 +8173,7 @@ function invert(out, a) {
 
     return out;
 };
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 module.exports = lookAt;
 
 /**
@@ -8212,7 +8262,7 @@ function lookAt(out, eye, center, up) {
 
     return out;
 };
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 module.exports = multiply;
 
 /**
@@ -8255,7 +8305,7 @@ function multiply(out, a, b) {
     out[15] = b0*a03 + b1*a13 + b2*a23 + b3*a33;
     return out;
 };
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 module.exports = ortho;
 
 /**
@@ -8292,7 +8342,7 @@ function ortho(out, left, right, bottom, top, near, far) {
     out[15] = 1;
     return out;
 };
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 module.exports = perspective;
 
 /**
@@ -8326,7 +8376,7 @@ function perspective(out, fovy, aspect, near, far) {
     out[15] = 0;
     return out;
 };
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 module.exports = rotate;
 
 /**
@@ -8391,7 +8441,7 @@ function rotate(out, a, rad, axis) {
     }
     return out;
 };
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 module.exports = rotateX;
 
 /**
@@ -8436,7 +8486,7 @@ function rotateX(out, a, rad) {
     out[11] = a23 * c - a13 * s;
     return out;
 };
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 module.exports = rotateY;
 
 /**
@@ -8481,7 +8531,7 @@ function rotateY(out, a, rad) {
     out[11] = a03 * s + a23 * c;
     return out;
 };
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 module.exports = rotateZ;
 
 /**
@@ -8526,7 +8576,7 @@ function rotateZ(out, a, rad) {
     out[7] = a13 * c - a03 * s;
     return out;
 };
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 module.exports = scale;
 
 /**
@@ -8558,7 +8608,7 @@ function scale(out, a, v) {
     out[15] = a[15];
     return out;
 };
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 module.exports = str;
 
 /**
@@ -8573,7 +8623,7 @@ function str(a) {
                     a[8] + ', ' + a[9] + ', ' + a[10] + ', ' + a[11] + ', ' + 
                     a[12] + ', ' + a[13] + ', ' + a[14] + ', ' + a[15] + ')';
 };
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 module.exports = translate;
 
 /**
@@ -8612,7 +8662,7 @@ function translate(out, a, v) {
 
     return out;
 };
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 module.exports = transpose;
 
 /**
@@ -8662,7 +8712,7 @@ function transpose(out, a) {
     
     return out;
 };
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 "use strict"
 
 var makeGameShell = require("game-shell")
@@ -8805,7 +8855,7 @@ function createGLShell(options) {
 }
 
 module.exports = createGLShell
-},{"game-shell":62,"webglew":64}],53:[function(require,module,exports){
+},{"game-shell":63,"webglew":65}],54:[function(require,module,exports){
 if(typeof window.performance === "object") {
   if(window.performance.now) {
     module.exports = function() { return window.performance.now() }
@@ -8818,7 +8868,7 @@ if(typeof window.performance === "object") {
   module.exports = function() { return (new Date()).getTime() }
 }
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 //Adapted from here: https://developer.mozilla.org/en-US/docs/Web/Reference/Events/wheel?redirectlocale=en-US&redirectslug=DOM%2FMozilla_event_reference%2Fwheel
 
 var prefix = "", _addEventListener, onwheel, support;
@@ -8878,7 +8928,7 @@ module.exports = function( elem, callback, useCapture ) {
     _addWheelListener( elem, "MozMousePixelScroll", callback, useCapture );
   }
 };
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
  
@@ -8908,7 +8958,7 @@ if (!window.cancelAnimationFrame)
         clearTimeout(id);
     };
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 "use strict"
 
 function compileSearch(funcName, predicate, reversed, extraArgs, useNdarray, earlyOut) {
@@ -8970,7 +9020,7 @@ module.exports = {
   eq: compileBoundsSearch("-", true, "EQ", true)
 }
 
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 /*!
   * domready (c) Dustin Diaz 2014 - License MIT
   */
@@ -9002,7 +9052,7 @@ module.exports = {
 
 });
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 "use strict"
 
 function invert(hash) {
@@ -9016,11 +9066,11 @@ function invert(hash) {
 }
 
 module.exports = invert
-},{}],59:[function(require,module,exports){
-module.exports=require(20)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray/node_modules/iota-array/iota.js":20}],60:[function(require,module,exports){
-module.exports=require(18)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/node_modules/cwise-compiler/node_modules/uniq/uniq.js":18}],61:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
+module.exports=require(21)
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray/node_modules/iota-array/iota.js":21}],61:[function(require,module,exports){
+module.exports=require(19)
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/node_modules/cwise-compiler/node_modules/uniq/uniq.js":19}],62:[function(require,module,exports){
 var ua = typeof window !== 'undefined' ? window.navigator.userAgent : ''
   , isOSX = /OS X/.test(ua)
   , isOpera = /Opera/.test(ua)
@@ -9158,7 +9208,7 @@ for(i = 112; i < 136; ++i) {
   output[i] = 'F'+(i-111)
 }
 
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 "use strict"
 
 var EventEmitter = require("events").EventEmitter
@@ -9897,35 +9947,35 @@ function createShell(options) {
 
 module.exports = createShell
 
-},{"./lib/hrtime-polyfill.js":53,"./lib/mousewheel-polyfill.js":54,"./lib/raf-polyfill.js":55,"binary-search-bounds":56,"domready":57,"events":8,"invert-hash":58,"iota-array":59,"uniq":60,"util":12,"vkey":61}],63:[function(require,module,exports){
-module.exports=require(24)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/node_modules/weak-map/weak-map.js":24}],64:[function(require,module,exports){
+},{"./lib/hrtime-polyfill.js":54,"./lib/mousewheel-polyfill.js":55,"./lib/raf-polyfill.js":56,"binary-search-bounds":57,"domready":58,"events":8,"invert-hash":59,"iota-array":60,"uniq":61,"util":12,"vkey":62}],64:[function(require,module,exports){
 module.exports=require(25)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/webglew.js":25,"weak-map":63}],65:[function(require,module,exports){
-module.exports=require(14)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/ndarray-ops.js":14,"cwise-compiler":66}],66:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/node_modules/weak-map/weak-map.js":25}],65:[function(require,module,exports){
+module.exports=require(26)
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/webglew.js":26,"weak-map":64}],66:[function(require,module,exports){
 module.exports=require(15)
-},{"./lib/thunk.js":68,"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/node_modules/cwise-compiler/compiler.js":15}],67:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/ndarray-ops.js":15,"cwise-compiler":67}],67:[function(require,module,exports){
 module.exports=require(16)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/node_modules/cwise-compiler/lib/compile.js":16,"uniq":69}],68:[function(require,module,exports){
+},{"./lib/thunk.js":69,"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/node_modules/cwise-compiler/compiler.js":16}],68:[function(require,module,exports){
 module.exports=require(17)
-},{"./compile.js":67,"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/node_modules/cwise-compiler/lib/thunk.js":17}],69:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/node_modules/cwise-compiler/lib/compile.js":17,"uniq":70}],69:[function(require,module,exports){
 module.exports=require(18)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/node_modules/cwise-compiler/node_modules/uniq/uniq.js":18}],70:[function(require,module,exports){
+},{"./compile.js":68,"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/node_modules/cwise-compiler/lib/thunk.js":18}],70:[function(require,module,exports){
 module.exports=require(19)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray/ndarray.js":19,"buffer":4,"iota-array":71}],71:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray-ops/node_modules/cwise-compiler/node_modules/uniq/uniq.js":19}],71:[function(require,module,exports){
 module.exports=require(20)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray/node_modules/iota-array/iota.js":20}],72:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray/ndarray.js":20,"buffer":4,"iota-array":72}],72:[function(require,module,exports){
 module.exports=require(21)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/typedarray-pool/node_modules/bit-twiddle/twiddle.js":21}],73:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/ndarray/node_modules/iota-array/iota.js":21}],73:[function(require,module,exports){
 module.exports=require(22)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/typedarray-pool/node_modules/dup/dup.js":22}],74:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/typedarray-pool/node_modules/bit-twiddle/twiddle.js":22}],74:[function(require,module,exports){
 module.exports=require(23)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/typedarray-pool/pool.js":23,"bit-twiddle":72,"buffer":4,"dup":73}],75:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/typedarray-pool/node_modules/dup/dup.js":23}],75:[function(require,module,exports){
 module.exports=require(24)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/node_modules/weak-map/weak-map.js":24}],76:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/typedarray-pool/pool.js":24,"bit-twiddle":73,"buffer":4,"dup":74}],76:[function(require,module,exports){
 module.exports=require(25)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/webglew.js":25,"weak-map":75}],77:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/node_modules/weak-map/weak-map.js":25}],77:[function(require,module,exports){
+module.exports=require(26)
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/webglew.js":26,"weak-map":76}],78:[function(require,module,exports){
 'use strict'
 
 var ndarray = require('ndarray')
@@ -10485,7 +10535,7 @@ function createTexture2D(gl) {
   throw new Error('gl-texture2d: Invalid arguments for texture2d constructor')
 }
 
-},{"ndarray":70,"ndarray-ops":65,"typedarray-pool":74,"webglew":76}],78:[function(require,module,exports){
+},{"ndarray":71,"ndarray-ops":66,"typedarray-pool":75,"webglew":77}],79:[function(require,module,exports){
 "use strict"
 
 function doBind(gl, elements, attributes) {
@@ -10540,7 +10590,7 @@ function doBind(gl, elements, attributes) {
 }
 
 module.exports = doBind
-},{}],79:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 "use strict"
 
 var bindAttribs = require("./do-bind.js")
@@ -10580,7 +10630,7 @@ function createVAOEmulated(gl) {
 }
 
 module.exports = createVAOEmulated
-},{"./do-bind.js":78}],80:[function(require,module,exports){
+},{"./do-bind.js":79}],81:[function(require,module,exports){
 "use strict"
 
 var bindAttribs = require("./do-bind.js")
@@ -10668,11 +10718,11 @@ function createVAONative(gl, ext) {
 }
 
 module.exports = createVAONative
-},{"./do-bind.js":78}],81:[function(require,module,exports){
-module.exports=require(24)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/node_modules/weak-map/weak-map.js":24}],82:[function(require,module,exports){
+},{"./do-bind.js":79}],82:[function(require,module,exports){
 module.exports=require(25)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/webglew.js":25,"weak-map":81}],83:[function(require,module,exports){
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/node_modules/weak-map/weak-map.js":25}],83:[function(require,module,exports){
+module.exports=require(26)
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/webglew/webglew.js":26,"weak-map":82}],84:[function(require,module,exports){
 "use strict"
 
 var webglew = require("webglew")
@@ -10692,7 +10742,7 @@ function createVAO(gl, attributes, elements, elementsType) {
 }
 
 module.exports = createVAO
-},{"./lib/vao-emulated.js":79,"./lib/vao-native.js":80,"webglew":82}],84:[function(require,module,exports){
+},{"./lib/vao-emulated.js":80,"./lib/vao-native.js":81,"webglew":83}],85:[function(require,module,exports){
 module.exports = programify
 
 var shader = require('gl-shader-core')
@@ -10703,7 +10753,7 @@ function programify(vertex, fragment, uniforms, attributes) {
   }
 }
 
-},{"gl-shader-core":90}],85:[function(require,module,exports){
+},{"gl-shader-core":91}],86:[function(require,module,exports){
 module.exports = noop
 
 function noop() {
@@ -10713,7 +10763,7 @@ function noop() {
   )
 }
 
-},{}],86:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 'use strict'
 
 module.exports = createAttributeWrapper
@@ -10809,7 +10859,7 @@ function createAttributeWrapper(gl, program, attributes, doLink) {
   }
   return obj
 }
-},{}],87:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 'use strict'
 
 var dup = require('dup')
@@ -10991,7 +11041,7 @@ function createUniformWrapper(gl, program, uniforms, locations) {
   }
 }
 
-},{"./reflect":88,"dup":89}],88:[function(require,module,exports){
+},{"./reflect":89,"dup":90}],89:[function(require,module,exports){
 'use strict'
 
 module.exports = makeReflectTypes
@@ -11049,9 +11099,9 @@ function makeReflectTypes(uniforms, useIndex) {
   }
   return obj
 }
-},{}],89:[function(require,module,exports){
-module.exports=require(22)
-},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/typedarray-pool/node_modules/dup/dup.js":22}],90:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
+module.exports=require(23)
+},{"/Users/andy/dev/glsl-projectron/node_modules/gl-buffer/node_modules/typedarray-pool/node_modules/dup/dup.js":23}],91:[function(require,module,exports){
 'use strict'
 
 var createUniformWrapper = require('./lib/create-uniforms')
@@ -11182,7 +11232,7 @@ function createShader(
 
 module.exports = createShader
 
-},{"./lib/create-attributes":86,"./lib/create-uniforms":87,"./lib/reflect":88}],91:[function(require,module,exports){
+},{"./lib/create-attributes":87,"./lib/create-uniforms":88,"./lib/reflect":89}],92:[function(require,module,exports){
 /* jshint unused:true, asi:true, laxcomma:true, -W097, -W008 */
 /* global module */
 "use strict";
