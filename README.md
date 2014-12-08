@@ -94,9 +94,9 @@ The sample "create" and "view" clients in the `examples` folder implement this.
 
 ## Known issues:
 
+* Displaying data fails spectacularly in Firefox Windows/Android. (Mac is fine.) No idea why - either alpha in WebGL is broken or my code is. Might be due to [this ownerless FF bug](https://bugzilla.mozilla.org/show_bug.cgi?id=687062).
 * Doesn't detect most error cases (just whether WebGL is supported)
 * Library treats input images as if they were square. To use for other aspects, just run it normally and change the aspect of the canvas you use to display the results. Example files could be updated to do this..
-* Viewer displays garbage in Firefox for Android?
 
 ##### Note:
 It's not at all clear to me that the algorithm here (and in the [blog][alsing] I got the idea from) is truly a "genetic" algorithm, but I'm deferring to the source material on terminology. There's no formal genome, I just have a data structure that I perturb once per generation and compare to its parent.
