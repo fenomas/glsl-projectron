@@ -65,7 +65,11 @@ var dragLoc = [0,0]
 var cameraXY = [0,0]
 
 $('body').bind('mousedown touchstart', function(e) {
+	if (e.originalEvent) {
+		e = e.originalEvent;
+	}
 	if (e.target.nodeName==="CANVAS") {
+		e.preventDefault();
 		dragging = true
 		var ev = (e.touches) ? e.touches[0] : e
 		dragLoc = dragStartLoc = [ ev.pageX, ev.pageY ]
@@ -73,13 +77,21 @@ $('body').bind('mousedown touchstart', function(e) {
 })
 
 $('body').bind('mousemove touchmove	', function(e) {
+	if (e.originalEvent) {
+		e = e.originalEvent;
+	}
 	if (e.target.nodeName==="CANVAS") {
+		e.preventDefault();
 		var ev = (e.touches) ? e.touches[0] : e
 		dragLoc = [ ev.pageX, ev.pageY ]
 	}
 })
 
 $('body').bind('mouseup touchend', function(e) {
+	if (e.originalEvent) {
+		e = e.originalEvent;
+	}
+	e.preventDefault();
 	dragging = false
 })
 
