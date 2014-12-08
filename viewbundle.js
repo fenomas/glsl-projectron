@@ -110,6 +110,7 @@ var keepFewerPolysTolerance = 0;
 var minAlpha = 0.05;
 var maxAlpha = 0.5;
 var useFlatPolys = false;
+var defaultScore = -100000;
 var glslify = require("glslify");
 var createBuffer = require("gl-buffer");
 var createVAO = require("gl-vao");
@@ -212,7 +213,7 @@ function init(glRef, imageRef, size) {
         drawFlat(refTexture, referenceFB, true);
     }
 
-    currentScore = -200;
+    currentScore = defaultScore;
     initialized = true;
 }
 
