@@ -8,7 +8,7 @@ After many generations, you get a chaotic bunch of polygons that align into an i
 ![Screencap of sample output](../gh-pages/img/lena_200.gif?raw=true "Sample output")
 
 ### Example live demos:
-* [Create a projection](http://andyhall.github.io/glsl-projectron/) (uncheck "Paused" to get started)
+* [Create a projection](http://andyhall.github.io/glsl-projectron/) (uncheck "Paused" to begin)
 * [View one I made earlier](http://andyhall.github.io/glsl-projectron/viewer.html)
 * Or the [obligatory Mona Lisa](http://andyhall.github.io/glsl-projectron/viewer_mona.html)
 
@@ -93,7 +93,7 @@ To use the library directly:
 ## Known issues:
 
 * Doesn't detect most error cases (just whether WebGL is supported)
-* Library assumes square input images for now
+* Library treats input images as if they were square. To use for other aspects, just run it normally and change the aspect of the canvas you use to display the results. Example files could be updated to do this..
 * Example client hard-codes the target image, so right now you can't specify your own without running it locally
 * Viewer displays garbage in Firefox for Android?
 
