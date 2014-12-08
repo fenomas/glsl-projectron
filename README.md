@@ -9,7 +9,7 @@ After many generations, you get a chaotic bunch of polygons that align into an i
 
 ### Example live demos:
 * [Create a projection](http://andyhall.github.io/glsl-projectron/) (uncheck "Paused" to begin)
-* [View one I made earlier](http://andyhall.github.io/glsl-projectron/viewer.html)
+* View [one I made earlier](http://andyhall.github.io/glsl-projectron/viewer.html), or [this other one](http://andyhall.github.io/glsl-projectron/viewer_vermeer.html)
 * Or the [obligatory Mona Lisa](http://andyhall.github.io/glsl-projectron/viewer_mona.html)
 
 Note that the creation process does its heavy lifting on the GPU (and then reads back the results), so it may not work on all video cards (definitely not mobile). Viewing a projection ought to work on any modern browser (and some devices).
