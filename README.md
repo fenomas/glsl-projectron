@@ -12,7 +12,7 @@ After many generations, you get a chaotic bunch of polygons that align into an i
 * View [one I made earlier](http://andyhall.github.io/glsl-projectron/viewer.html), or [this other one](http://andyhall.github.io/glsl-projectron/viewer_vermeer.html)
 * Or the [obligatory Mona Lisa](http://andyhall.github.io/glsl-projectron/viewer_mona.html)
 
-I also put up a [blog post here](http://aphall.com/2014/12/glsl-projectron/) explaining how it works and why I made it.
+I also put up a [blog post here](http://aphall.com/2014/12/glsl-projectron/) explaining the algorithm, and how I made it run fast on the GPU.
 
 ## Installation & Usage
 
