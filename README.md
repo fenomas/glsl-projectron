@@ -1,18 +1,18 @@
 GLSL-Projectron
 ================
 
-This is a WebGL/[GPGPU](http://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units) demo I made to teach myself shader programming. It generates (genetically?[*](#note)) random 3D polygons which resemble a given target image when projected. Basically it's the concept from [this blog post][alsing], but done in 3D and on the GPU.
+This is a WebGL/[GPGPU](http://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units) demo I made to teach myself shader programming. It generates random 3D polygons which resemble a given target image when projected. Basically it's the concept from [this blog post][alsing], but done in 3D and on the GPU.
 
-After many generations, you get a chaotic bunch of polygons that align into an image from just the right angle:
+After many generations, you get a chaotic bunch of polygons that align into an image, but only from just the right angle:
 
-![Screencap of sample output](../gh-pages/img/lena_200.gif?raw=true "Sample output")
+[![Screencap of sample output](../gh-pages/img/lena_200.gif?raw=true "Sample output")](http://andyhall.github.io/glsl-projectron/viewer.html)
 
-### Example live demos:
+### Live demos:
 * [Create a projection](http://andyhall.github.io/glsl-projectron/) (uncheck "Paused" to begin)
 * View [one I made earlier](http://andyhall.github.io/glsl-projectron/viewer.html), or [this other one](http://andyhall.github.io/glsl-projectron/viewer_vermeer.html)
 * Or the [obligatory Mona Lisa](http://andyhall.github.io/glsl-projectron/viewer_mona.html)
 
-Note that the creation process does its heavy lifting on the GPU (and then reads back the results), so it may not work on all video cards (definitely not mobile). Viewing a projection ought to work on any modern browser (and some devices).
+I also put up a [blog post here](http://aphall.com/2014/12/glsl-projectron/) explaining how it works and why I made it.
 
 ## Installation & Usage
 
@@ -23,13 +23,15 @@ Note that the creation process does its heavy lifting on the GPU (and then reads
 
 That launches a local copy of the "Create" demo linked above. Alternately, doing `npm run viewer` launches a local copy of the viewer demo. Use `npm run bundle` to browserify the examples.
 
-To use the library directly:
+To use the core module directly:
 
     var proj = require('path/to/glsl-projectron/')
     proj.init( glReference, imageReference )
     //..
     proj.runGeneration()        // many times..
     proj.paint()                // once per frame..
+
+The sample "create" and "view" clients in the `examples` folder implement this.
 
 ## API
 
@@ -94,10 +96,7 @@ To use the library directly:
 
 * Doesn't detect most error cases (just whether WebGL is supported)
 * Library treats input images as if they were square. To use for other aspects, just run it normally and change the aspect of the canvas you use to display the results. Example files could be updated to do this..
-* Example client hard-codes the target image, so right now you can't specify your own without running it locally
 * Viewer displays garbage in Firefox for Android?
-
-*Pull requests welcome!*
 
 ##### Note:
 It's not at all clear to me that the algorithm here (and in the [blog][alsing] I got the idea from) is truly a "genetic" algorithm, but I'm deferring to the source material on terminology. There's no formal genome, I just have a data structure that I perturb once per generation and compare to its parent.
