@@ -19,7 +19,7 @@ var maxAlpha = .5
 
 var useFlatPolys = false
 
-
+var defaultScore = -100000
 
 
 
@@ -163,7 +163,7 @@ function init( glRef, imageRef, size ) {
 		drawFlat(refTexture, referenceFB, true)
 	}
 	
-	currentScore = -200
+	currentScore = defaultScore
 	initialized = true
 }
 

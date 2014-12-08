@@ -68,7 +68,7 @@ To use the library directly:
 
 * **score**
 
-  (read only) Returns the score (fitness) of the current data. Scales roughly from -100 to 100.
+  (read only) Returns the score (fitness) of the current data. Ranges from minus a few hundred up to 100 for a perfect match.
 
 * **numPolys**
 
