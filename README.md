@@ -15,21 +15,23 @@ After many generations, you get a chaotic bunch of polygons that align into an i
 I also put up a [blog post here](http://aphall.com/2014/12/glsl-projectron/) explaining the algorithm, and how I made it run fast on the GPU.
 
 ## Installation & Usage
-
-    git clone [this repo]
-    cd glsl-projectron
-    npm install
-    npm start
+```bash
+git clone [this repo]
+cd glsl-projectron
+npm install
+npm start
+```
 
 That launches a local copy of the "Create" demo linked above. Alternately, doing `npm run viewer` launches a local copy of the viewer demo. Use `npm run bundle` to browserify the examples.
 
 To use the core module directly:
-
-    var proj = require('path/to/glsl-projectron/')
-    proj.init( glReference, imageReference )
-    //..
-    proj.runGeneration()        // many times..
-    proj.paint()                // once per frame..
+```js
+const proj = require('path/to/glsl-projectron/')
+proj.init( glReference, imageReference )
+//..
+proj.runGeneration()        // many times..
+proj.paint()                // once per frame..
+```
 
 The sample "create" and "view" clients in the `examples` folder implement this.
 
