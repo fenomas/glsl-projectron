@@ -424,9 +424,11 @@ export function Projectron(canvas, size) {
 		var curr, v = [], c = []
 		var arr = s.split(',')
 		arr.forEach(function (s) {
+			var n = parseFloat(s)
 			if (s.indexOf('vert-xyz') > -1) { curr = v }
 			else if (s.indexOf('col-rgba') > -1) { curr = c }
-			else { curr.push(parseFloat(s)) }
+			else if (curr && !isNaN(n)) { curr.push(n) }
+			else { console.warn('Import: ignoring value ' + s) }
 		})
 		// this is all pretty ad-hoc but it will work well enough for a demo
 		if (v.length / 3 === c.length / 4) {
@@ -439,6 +441,10 @@ export function Projectron(canvas, size) {
 				currentScore = compareFBOs(referenceFB, scratchFB)
 			}
 			return true
+		} else {
+			console.warn('Import failed: unbalanced counts, verts=' +
+				`${v.length / 3}  cols=${c.length / 4}`
+			)
 		}
 	}
 

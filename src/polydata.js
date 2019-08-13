@@ -22,8 +22,8 @@ export function PolyData() {
     var vertArr = []
     var colArr = []
 
-    this.getNumVerts = () => vertArr.length / 3
-    this.getNumPolys = () => vertArr.length / 9
+    this.getNumVerts = () => (vertArr.length / 3) | 0
+    this.getNumPolys = () => (vertArr.length / 9) | 0
     this.getVertArray = () => vertArr
     this.getColorArray = () => colArr
 
@@ -51,7 +51,7 @@ export function PolyData() {
     var randomizeColor = (old) => rand()
     var randomizeAlpha = (old) => randAlpha()
 
-    
+
 
 
 
@@ -105,7 +105,7 @@ export function PolyData() {
             for (var i = 0; i < 3; i++) {
                 colArr[ci + i] = randomizeColor(colArr[ci + i])
             }
-            colArr[ci + 4] = randomizeAlpha(colArr[ci + 4])
+            colArr[ci + 3] = randomizeAlpha(colArr[ci + 3])
         } else {
             var vi = num * 3
             for (var j = 0; j < 3; j++) {
