@@ -32,8 +32,8 @@ export function PolyData() {
         colArr = c
     }
     this.setAlphaRange = (min, max) => {
-        minAlpha = min || 0.05
-        maxAlpha = max || 0.5
+        if (min || (min === 0)) minAlpha = min
+        if (max || (max === 0)) maxAlpha = max
     }
     this.setFlattenZ = (z) => { flattenZ = z }
 

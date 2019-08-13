@@ -10,7 +10,7 @@
         body {
             margin: 0.5rem;
             height: 100%;
-            font: 300 16px Meiryo, Helvetica, sans-serif;
+            font: 300 15px Meiryo, Helvetica, sans-serif;
         }
 
         select,
@@ -56,12 +56,28 @@
 
         strong {
             font-weight: 500;
-            font-size: 120%;
+            font-size: 135%;
         }
 
         .txt {
             width: 6rem;
             font: 400 15px monospace;
+        }
+
+        .txtin {
+            text-align: center;
+            width: 3rem;
+            font: 400 15px monospace;
+            line-height: 20px;
+        }
+
+        #data {
+            font: 400 13px monospace;
+        }
+
+        .desc {
+            width: 550px;
+            margin-left: 2rem;
         }
     </style>
 </head>
@@ -106,40 +122,55 @@
         <label><input class='txt' id='gens'> Generations</label>
         <label><input class='txt' id='gps'> Gens/s</label>
         <label><input class='txt' id='score'> Score</label>
+        <div class='sep'></div>
 
+        <label>
+            Alpha range:
+            <input class='txtin' id='minAlpha' value='0.1'> to
+            <input class='txtin' id='maxAlpha' value='0.5'>
+        </label>
         <div class='sep'></div>
 
         <button id='export'>Export vert/color data ↓</button>
         <br>
-        <textarea id='data' rows='5' cols='30'></textarea>
+        <textarea id='data' rows='3' cols='30'></textarea>
         <br>
         <button id='import'>Import vert/color data ↑</button>
-
         <div class='sep'></div>
 
         <label>
-            <input type='checkbox' id='showRef' />
-            Show reference
+            <input type='checkbox' id='showRef' />Show reference
         </label>
-
         <label>
-            <input type='checkbox' id='showScr' />
-            Scratch buffer
+            <input type='checkbox' id='showScr' />Scratch buffer
         </label>
 
     </div>
 
     <br clear='left'>
-    <p style='margin-left: 2rem;'>
+    <p class='desc'>
         To change the target image drag an image onto this page.
     </p>
 
-    <p style='margin-left: 2rem;'>
+    <p class='desc'>
         Or check out some built examples:
         &mdash; <a href="./viewer.html">Lena</a>
         &mdash; <a href="./viewer-mona.html">Mona</a>
         &mdash; <a href="./viewer-vermeer.html">Vermeer</a>
     </p>
+
+    <p class='desc' style="width: 500px;">
+        You can also specify a size for the internal comparison texture
+        in this page's query string, 
+        <a href="./index.html?size=128">thusly</a>.
+    </p>
+
+    <p class='desc'>
+        Back to <a href="https://github.com/andyhall/glsl-projectron">GLSL-Projectron</a>
+    </p>
+
+    <br>
+    <br>
 
     <script src="maker-bundle.js"></script>
 

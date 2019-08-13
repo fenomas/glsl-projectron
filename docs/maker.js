@@ -13,9 +13,13 @@ import { Projectron } from '../src'
  * 
 */
 
+// allow internal comparison texture size to be specified in query
+var size = 256
+var s = parseInt(new URLSearchParams(location.search).get('size'))
+if (s > 8) size = s
 
 var canvas = document.getElementById('view')
-var proj = new Projectron(canvas)
+var proj = new Projectron(canvas, size)
 
 var img = new Image()
 img.onload = () => { setImage(img) }
@@ -49,6 +53,8 @@ function setImage(img) {
 var paused = true
 var showReference = false
 var showScratch = false
+var minAlpha = 0.1
+var maxAlpha = 0.5
 
 var cameraRot = [0, 0]
 var generations = 0
@@ -110,9 +116,9 @@ render()
 var $ = s => document.getElementById(s)
 var setupInput = (el, handler) => {
     $(el).addEventListener('change', ev => {
-        drawNeeded = true
-        if (ev.target.checked !== undefined) handler(ev.target.checked)
-        if (ev.target.selectedOptions !== undefined) handler(ev.target.selectedOptions[0].label)
+        var t = ev.target.type
+        if (t === 'checkbox') return handler(ev.target.checked)
+        return handler(ev.target.value)
     })
 }
 
@@ -121,12 +127,15 @@ setupInput('showRef', val => { showReference = val })
 setupInput('showScr', val => { showScratch = val })
 setupInput('gensPerFrame', val => { gensPerFrame = parseInt(val) })
 
+var setAlpha = () => proj.setAlphaRange(minAlpha, maxAlpha)
+setupInput('minAlpha', val => { minAlpha = parseFloat(val); setAlpha() })
+setupInput('maxAlpha', val => { maxAlpha = parseFloat(val); setAlpha() })
+
 setupInput('fewerPolys', val => {
     var ind = $('fewerPolys').selectedIndex
     var tols = [0, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1]
     proj.setFewerPolysTolerance(tols[ind])
 })
-
 
 
 $('export').addEventListener('click', ev => {

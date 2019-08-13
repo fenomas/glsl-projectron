@@ -423,6 +423,7 @@ export function Projectron(canvas, size) {
 	this.importData = function (s) {
 		var curr, v = [], c = []
 		var arr = s.split(',')
+		if (s.length < 5) return
 		arr.forEach(function (s) {
 			var n = parseFloat(s)
 			if (s.indexOf('vert-xyz') > -1) { curr = v }
