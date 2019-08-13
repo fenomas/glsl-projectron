@@ -49,9 +49,8 @@ proj.draw(x,y)          // once per frame..
 
 ----
 
-### Author: [Andy Hall](https://twitter.com/fenomas)
+### Credits
 
-### License: MIT
-
+Made with 🍺 by [Andy Hall](https://twitter.com/fenomas). MIT license.
 
 

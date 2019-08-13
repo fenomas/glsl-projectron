@@ -1,4 +1,9 @@
-
+/*!
+ * glsl-projectron: experimental GPGPU thingy
+ * @url      github.com/andyhall/glsl-projectron
+ * @author   Andy Hall <andy@fenomas.com>
+ * @license  MIT
+ */
 
 import { PolyData } from './polydata'
 
