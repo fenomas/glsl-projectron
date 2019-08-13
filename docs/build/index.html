@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Projected image creator</title>
+    <meta name="description" content="viewer">
+    <style type="text/css">
+        html,
+        body {
+            margin: 0.5rem;
+            height: 100%;
+            font: 300 16px Meiryo, Helvetica, sans-serif;
+        }
+
+        select,
+        input,
+        button {
+            font: inherit;
+        }
+
+        .container {
+            margin: 0.5rem;
+            float: left;
+            width: 500px;
+            height: 500px;
+        }
+
+        .UI {
+            float: left;
+            margin: 1rem;
+        }
+
+        label {
+            user-select: none;
+            display: block;
+            margin: 0.25rem;
+        }
+
+        label>* {
+            vertical-align: middle;
+        }
+
+        button {
+            margin: 0.25rem;
+        }
+
+        .sep {
+            height: 1rem;
+        }
+
+        .view {
+            width: 500px;
+            height: 500px;
+        }
+
+        strong {
+            font-weight: 500;
+            font-size: 120%;
+        }
+
+        .txt {
+            width: 6rem;
+            font: 400 15px monospace;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class='container'>
+        <canvas id='view' width="500px" height="500px"></canvas>
+    </div>
+
+    <div class='UI'>
+
+        <label>
+            <input type='checkbox' id='paused' checked />
+            <strong>Paused</strong>
+        </label>
+
+        <div class='sep'></div>
+
+        <label><select id='gensPerFrame'>
+                <option>1</option>
+                <option>10</option>
+                <option selected='true'>20</option>
+                <option>50</option>
+                <option>100</option>
+            </select> generations per frame
+        </label>
+
+        <label><select id='fewerPolys'>
+                <option selected='true'>Don't</option>
+                <option>Slightly</option>
+                <option>Kinda</option>
+                <option>Somewhat</option>
+                <option>Moderately</option>
+                <option>Strongly</option>
+            </select> prefer fewer polys
+        </label>
+
+        <div class='sep'></div>
+
+        <label><input class='txt' id='polys'> Polygons</label>
+        <label><input class='txt' id='gens'> Generations</label>
+        <label><input class='txt' id='gps'> Gens/s</label>
+        <label><input class='txt' id='score'> Score</label>
+
+        <div class='sep'></div>
+
+        <button id='export'>Export vert/color data ↓</button>
+        <br>
+        <textarea id='data' rows='5' cols='30'></textarea>
+        <br>
+        <button id='import'>Import vert/color data ↑</button>
+
+        <div class='sep'></div>
+
+        <label>
+            <input type='checkbox' id='showRef' />
+            Show reference
+        </label>
+
+        <label>
+            <input type='checkbox' id='showScr' />
+            Scratch buffer
+        </label>
+
+    </div>
+
+    <br clear='left'>
+    <p style='margin-left: 2rem;'>
+        To change the target image drag an image onto this page.
+    </p>
+
+    <p style='margin-left: 2rem;'>
+        Or check out some built examples:
+        &mdash; <a href="./viewer.html">Lena</a>
+        &mdash; <a href="./viewer-mona.html">Mona</a>
+        &mdash; <a href="./viewer-vermeer.html">Vermeer</a>
+    </p>
+
+    <script src="maker-bundle.js"></script>
+
+</body>
+
+</html>
