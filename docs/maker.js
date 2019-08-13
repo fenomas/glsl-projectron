@@ -1,6 +1,7 @@
 
 
 import { Projectron } from '../src'
+var $ = s => document.getElementById(s)
 
 
 
@@ -113,7 +114,6 @@ render()
  * 
 */
 
-var $ = s => document.getElementById(s)
 var setupInput = (el, handler) => {
     $(el).addEventListener('change', ev => {
         var t = ev.target.type
