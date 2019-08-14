@@ -58,8 +58,9 @@ export function Projectron(canvas, size) {
 	*/
 
 	this.setTargetImage = setTargetImage
-	this.setAlphaRange = (a, b) => polys.setAlphaRange(a, b)
-	this.setFewerPolysTolerance = n => { keepFewerPolysTolerance = n }
+	this.setAlphaRange = (a, b) => polys.setAlphaRange(+a, +b)
+	this.setAdjustAmount = (n) => polys.setAdjust(+n)
+	this.setFewerPolysTolerance = n => { keepFewerPolysTolerance = +n }
 
 	this.getScore = () => currentScore
 	this.getNumPolys = () => polys.getNumPolys()
@@ -67,7 +68,7 @@ export function Projectron(canvas, size) {
 	this.drawTargetImage = () => { paintReference() }
 	this._drawScratchImage = () => { paintScratchBuffer() }
 
-
+	this.version = require('../package.json').version
 
 
 

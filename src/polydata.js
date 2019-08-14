@@ -15,9 +15,7 @@ export function PolyData() {
     var minAlpha = 0.1
     var maxAlpha = 0.5
     var flattenZ = 0
-
-    var rand = () => Math.random()
-    var randAlpha = () => minAlpha + rand() * (maxAlpha - minAlpha)
+    var adjAmount = 0.5
 
     var vertArr = []
     var colArr = []
@@ -35,6 +33,7 @@ export function PolyData() {
         if (min || (min === 0)) minAlpha = min
         if (max || (max === 0)) maxAlpha = max
     }
+    this.setAdjust = (num) => { adjAmount = num }
     this.setFlattenZ = (z) => { flattenZ = z }
 
 
@@ -43,23 +42,43 @@ export function PolyData() {
 
     /*
      * 
-     *  randomizers... might look at these later..
+     *  randomizer handlers
      * 
     */
 
-    var randomizeCoord = (old) => rand()
-    var randomizeColor = (old) => rand()
-    var randomizeAlpha = (old) => randAlpha()
+    var rand = () => Math.random()
+    var randRange = (a, b) => a + (b - a) * Math.random()
+
+    var randomizeVal = (old) => {
+        if (!old) return rand()
+        var a = Math.max(0, old - adjAmount)
+        var b = Math.min(1, old + adjAmount)
+        return randRange(a, b)
+    }
+    var randomizeAlpha = (old) => {
+        if (!old) return randRange(minAlpha, maxAlpha)
+        var a = Math.max(minAlpha, old - adjAmount)
+        var b = Math.min(maxAlpha, old + adjAmount)
+        return randRange(a, b)
+    }
 
 
 
 
+
+    /*
+     * 
+     * 
+     *      data mutators 
+     * 
+     * 
+    */
 
     this.addPoly = function () {
         for (var i = 0; i < 3; i++) {
             for (var j = 0; j < 3; j++) {
-                vertArr.push(randomizeCoord())
-                colArr.push(randomizeColor())
+                vertArr.push(randomizeVal())
+                colArr.push(randomizeVal())
             }
             colArr.push(randomizeAlpha())
         }
@@ -71,8 +90,6 @@ export function PolyData() {
         }
     }
 
-
-
     // remove a random poly
     this.removePoly = function () {
         if (this.getNumPolys() < 2) return
@@ -81,21 +98,17 @@ export function PolyData() {
         colArr.splice(index * 12, 12)
     }
 
-
-
     // randomize one R/G/B/A/X/Y/Z value
     this.mutateValue = function () {
         if (rand() < 0.5) {
             var ci = (rand() * colArr.length) | 0
-            var randomizer = (ci % 4 === 3) ? randomizeAlpha : randomizeColor
+            var randomizer = (ci % 4 === 3) ? randomizeAlpha : randomizeVal
             colArr[ci] = randomizer(colArr[ci])
         } else {
             var vi = (rand() * vertArr.length) | 0
-            vertArr[vi] = randomizeCoord(vertArr[vi])
+            vertArr[vi] = randomizeVal(vertArr[vi])
         }
     }
-
-
 
     // randomize either all RGBA or all XYZ of one vertex
     this.mutateVertex = function () {
@@ -103,46 +116,22 @@ export function PolyData() {
         if (rand() < 0.5) {
             var ci = num * 4
             for (var i = 0; i < 3; i++) {
-                colArr[ci + i] = randomizeColor(colArr[ci + i])
+                colArr[ci + i] = randomizeVal(colArr[ci + i])
             }
             colArr[ci + 3] = randomizeAlpha(colArr[ci + 3])
         } else {
             var vi = num * 3
             for (var j = 0; j < 3; j++) {
-                vertArr[vi + j] = randomizeCoord(vertArr[vi + j])
+                vertArr[vi + j] = randomizeVal(vertArr[vi + j])
             }
         }
     }
 
 
 
-    // // add a new poly that's a clone of an existing one with one vertex moved
-    // // conceptually like making a 3-poly into a folded quad
-    // this.clonePoly = function () {
-    //     var vertArr = this.vertArr
-    //     var colArr = this.colArr
-    //     // // new vertices, copy colors as they are
-    //     // var index = (rand() * vertArr.length / 9) | 0
-    //     // for (var i = 0; i < 12; i++) {
-    //     //     colArr.push(colArr[index * 12 + i])
-    //     // }
-    //     // // clone 2 of 3 position vertices, then push a random one
-    //     // var skip = floor(3 * rand())
-    //     // for (var i = 0; i < 9; i++) {
-    //     //     if (floor(i / 3) != skip) { vertArr.push(vertArr[index * 9 + i]) }
-    //     // }
-    //     // for (i = 0; i < 3; i++) { vertArr.push(rand()) }
-    //     // // in flat mode, give new position z from one of the others
-    //     // if (flattenedZ) {
-    //     //     var len = vertArr.length
-    //     //     vertArr[len - 1] = (rand() > .5) ? vertArr[len - 4] : vertArr[len - 7]
-    //     // }
-    // }
 
 
-
-
-
+    // helpers
 
     this.cacheDataNow = function () {
         oldVertArr = vertArr.slice()

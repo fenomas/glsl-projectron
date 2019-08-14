@@ -19,7 +19,7 @@ var size = 256
 var s = parseInt(new URLSearchParams(location.search).get('size'))
 if (s > 8) size = s
 
-var canvas = document.getElementById('view')
+var canvas = $('view')
 var proj = new Projectron(canvas, size)
 
 var img = new Image()
@@ -35,6 +35,7 @@ function setImage(img) {
     proj.setTargetImage(img)
 }
 
+console.log('GLSL-Projectron  ver ' + proj.version)
 
 
 
@@ -54,8 +55,6 @@ function setImage(img) {
 var paused = true
 var showReference = false
 var showScratch = false
-var minAlpha = 0.1
-var maxAlpha = 0.5
 
 var cameraRot = [0, 0]
 var generations = 0
@@ -127,9 +126,12 @@ setupInput('showRef', val => { showReference = val })
 setupInput('showScr', val => { showScratch = val })
 setupInput('gensPerFrame', val => { gensPerFrame = parseInt(val) })
 
+var minAlpha = 0.1
+var maxAlpha = 0.5
 var setAlpha = () => proj.setAlphaRange(minAlpha, maxAlpha)
 setupInput('minAlpha', val => { minAlpha = parseFloat(val); setAlpha() })
 setupInput('maxAlpha', val => { maxAlpha = parseFloat(val); setAlpha() })
+setupInput('adjust', val => { proj.setAdjustAmount(parseFloat(val) || 0.5) })
 
 setupInput('fewerPolys', val => {
     var ind = $('fewerPolys').selectedIndex
