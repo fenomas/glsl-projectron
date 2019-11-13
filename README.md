@@ -29,7 +29,7 @@ That serves a local build of the "Create" demo linked above, in `localhost:8080`
 
 Use `npm run build` to rebuild the static version in `/docs`.
 
-To use this as a dependency, follow the example `docs/maker.js`:
+To use this as a dependency, follow the example in `/demo/maker.js`:
 
 ```js
 import { Projectron } from 'path/to/glsl-projectron'
