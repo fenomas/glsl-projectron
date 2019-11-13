@@ -1,6 +1,6 @@
 {
   "name": "glsl-projectron",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "GPU demo to evolve vertex data matching a target image",
   "author": "Andy Hall",
   "license": "MIT",
@@ -9,8 +9,8 @@
     "/src"
   ],
   "scripts": {
-    "start": "cd docs; webpack-dev-server",
-    "build": "cd docs; webpack --env.production"
+    "start": "cd demo; webpack-dev-server",
+    "build": "cd demo; webpack --env.production"
   },
   "dependencies": {
     "game-shell": "github:mikolalysenko/game-shell",

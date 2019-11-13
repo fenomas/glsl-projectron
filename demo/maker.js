@@ -184,18 +184,23 @@ var rotScale = 1 / 150
 var cameraReturn = 0.9
 var dragging = false
 var lastLoc = [0, 0]
-var getEventLoc = ev => [
-    (ev.clientX) ? ev.clientX : ev.targetTouches[0].clientX,
-    (ev.clientY) ? ev.clientY : ev.targetTouches[0].clientY,
-]
+var getEventLoc = ev => {
+    if (typeof ev.clientX === 'number') return [ev.clientX, ev.clientY]
+    if (ev.targetTouches && ev.targetTouches.length) {
+        var touch = ev.targetTouches[0]
+        return [touch.clientX, touch.clientY]
+    }
+    return null
+}
 var startDrag = ev => {
     ev.preventDefault()
     dragging = true
-    lastLoc = getEventLoc(ev)
+    lastLoc = getEventLoc(ev) || lastLoc
 }
 var drag = ev => {
-    var loc = getEventLoc(ev)
     if (!dragging) return
+    var loc = getEventLoc(ev)
+    if (!loc) return
     ev.preventDefault()
     cameraRot[0] += (loc[0] - lastLoc[0]) * rotScale
     cameraRot[1] += (loc[1] - lastLoc[1]) * rotScale

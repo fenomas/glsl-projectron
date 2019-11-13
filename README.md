@@ -5,14 +5,14 @@ This is a WebGL/[GPGPU](http://en.wikipedia.org/wiki/General-purpose_computing_o
 
 After many generations, you get a chaotic bunch of polygons that align into an image, but only from just the right angle:
 
-[![Screencap of sample output](./docs/build/img/lena_200.gif?raw=true "Sample output")](http://andyhall.github.io/glsl-projectron/build/viewer.html)
+[![Screencap of sample output](./docs/img/lena_200.gif?raw=true "Sample output")](http://andyhall.github.io/glsl-projectron/viewer.html)
 
 ## Live demos:
 
- * [Create a projection](http://andyhall.github.io/glsl-projectron/build/) (uncheck "Paused" to begin)
- * View [one I made earlier](http://andyhall.github.io/glsl-projectron/build/viewer.html)
- * or [this other one](http://andyhall.github.io/glsl-projectron/build/viewer-vermeer.html)
- * Or the [obligatory Mona Lisa](http://andyhall.github.io/glsl-projectron/build/viewer-mona.html)
+ * [Create a projection](http://andyhall.github.io/glsl-projectron/) (uncheck "Paused" to begin)
+ * View [one I made earlier](http://andyhall.github.io/glsl-projectron/viewer.html)
+ * or [this other one](http://andyhall.github.io/glsl-projectron/viewer-vermeer.html)
+ * Or the [obligatory Mona Lisa](http://andyhall.github.io/glsl-projectron/viewer-mona.html)
 
 I also put up a [blog post here](http://aphall.com/2014/12/glsl-projectron/) explaining the algorithm, and how I made it run fast on the GPU.
 
@@ -25,8 +25,9 @@ npm install
 npm start
 ```
 
-That launches a local build of the "Create" demo linked above. 
-Use `npm run build` to rebuild all the code bundles.
+That serves a local build of the "Create" demo linked above, in `localhost:8080`.
+
+Use `npm run build` to rebuild the static version in `/docs`.
 
 To use this as a dependency, follow the example `docs/maker.js`:
 
