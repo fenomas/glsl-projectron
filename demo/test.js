@@ -18,7 +18,7 @@ var gl = canvas.getContext('webgl')
 // start things off
 var img = new Image()
 img.onload = () => init(img)
-img.src = './img/lena.png'
+img.src = './img/mona512.jpg'
 
 
 

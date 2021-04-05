@@ -24,9 +24,9 @@ var proj = new Projectron(canvas, size)
 
 var img = new Image()
 img.onload = () => { setImage(img) }
-img.src = './img/lena.png'
+img.src = './img/mona512.jpg'
 
-// img.src = './img/mona512.png'
+// img.src = './img/lena.png'
 // img.src = './img/teapot512.png'
 
 
