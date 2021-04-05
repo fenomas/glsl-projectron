@@ -5,14 +5,13 @@ This is a WebGL/[GPGPU](http://en.wikipedia.org/wiki/General-purpose_computing_o
 
 After many generations, you get a chaotic bunch of polygons that align into an image, but only from just the right angle:
 
-[![Screencap of sample output](./docs/img/lena_200.gif?raw=true "Sample output")](http://andyhall.github.io/glsl-projectron/viewer.html)
+[![Screencap of sample output](./docs/img/mona-320.gif?raw=true "Sample output")](http://andyhall.github.io/glsl-projectron/viewer.html)
 
 ## Live demos:
 
  * [Create a projection](http://andyhall.github.io/glsl-projectron/) (uncheck "Paused" to begin)
  * View [one I made earlier](http://andyhall.github.io/glsl-projectron/viewer.html)
  * or [this other one](http://andyhall.github.io/glsl-projectron/viewer-vermeer.html)
- * Or the [obligatory Mona Lisa](http://andyhall.github.io/glsl-projectron/viewer-mona.html)
 
 I also put up a [blog post here](http://aphall.com/2014/12/glsl-projectron/) explaining the algorithm, and how I made it run fast on the GPU.
 
