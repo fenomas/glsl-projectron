@@ -1,19 +1,19 @@
 ## GLSL-Projectron
 --------
 
-This is a WebGL/[GPGPU](http://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units) demo I made to try out shader programming. It generates random 3D polygons which resemble a given target image when projected. Basically it's similar to [this](http://rogeralsing.com/2008/12/07/genetic-programming-evolution-of-mona-lisa/), but done in 3D and on the GPU.
+This is a WebGL/[GPGPU](https://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units) demo I made to try out shader programming. It generates random 3D polygons which resemble a given target image when projected. Basically it's similar to [this](https://rogeralsing.com/2008/12/07/genetic-programming-evolution-of-mona-lisa/), but done in 3D and on the GPU.
 
 After many generations, you get a chaotic bunch of polygons that align into an image, but only from just the right angle:
 
-[![Screencap of sample output](./docs/img/mona-320.gif?raw=true "Sample output")](http://andyhall.github.io/glsl-projectron/viewer.html)
+[![Screencap of sample output](./docs/img/mona-320.gif?raw=true "Sample output")](https://andyhall.github.io/glsl-projectron/viewer.html)
 
 ## Live demos:
 
- * [Create a projection](http://andyhall.github.io/glsl-projectron/) (uncheck "Paused" to begin)
- * View [one I made earlier](http://andyhall.github.io/glsl-projectron/viewer.html)
- * or [this other one](http://andyhall.github.io/glsl-projectron/viewer-vermeer.html)
+ * [Create a projection](https://andyhall.github.io/glsl-projectron/) (uncheck "Paused" to begin)
+ * View [one I made earlier](https://andyhall.github.io/glsl-projectron/viewer.html)
+ * or [this other one](https://andyhall.github.io/glsl-projectron/viewer-vermeer.html)
 
-I also put up a [blog post here](http://aphall.com/2014/12/glsl-projectron/) explaining the algorithm, and how I made it run fast on the GPU.
+I also wrote a [blog post here](https://aphall.com/2014/12/glsl-projectron/) explaining the algorithm, and how I made it run fast on the GPU.
 
 ## Installation & Usage
 
