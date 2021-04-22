@@ -96,8 +96,8 @@ canvas.addEventListener('mousedown', startDrag)
 canvas.addEventListener('touchstart', startDrag)
 document.body.addEventListener('mouseup', stopDrag)
 document.body.addEventListener('touchend', stopDrag)
-canvas.addEventListener('mousemove', drag)
-canvas.addEventListener('touchmove', drag)
+document.body.addEventListener('mousemove', drag)
+document.body.addEventListener('touchmove', drag)
 
 
 // update/debounce
