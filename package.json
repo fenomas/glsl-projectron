@@ -32,10 +32,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/andyhall/glsl-projectron.git"
+    "url": "https://github.com/fenomas/glsl-projectron.git"
   },
   "bugs": {
-    "url": "https://github.com/andyhall/glsl-projectron/issues"
+    "url": "https://github.com/fenomas/glsl-projectron/issues"
   },
   "keywords": [
     "GLSL",
