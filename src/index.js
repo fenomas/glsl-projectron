@@ -42,8 +42,7 @@ export function Projectron(canvas, size) {
 
 	// global settings
 	var perspective = 0.2
-	var keepFewerPolysTolerance = 0
-	var flattenZ = 0
+	var fewerPolysTolerance = 0.001
 	var fboSize = Math.max(32, powerOfTwoSize)
 	var tgtTexture = null
 	var currentScore = -100
@@ -60,7 +59,7 @@ export function Projectron(canvas, size) {
 	this.setTargetImage = setTargetImage
 	this.setAlphaRange = (a, b) => polys.setAlphaRange(+a, +b)
 	this.setAdjustAmount = (n) => polys.setAdjust(+n)
-	this.setFewerPolysTolerance = n => { keepFewerPolysTolerance = +n }
+	this.setFewerPolyTolerance = (n) => { fewerPolysTolerance = n || 0 }
 
 	this.getScore = () => currentScore
 	this.getNumPolys = () => polys.getNumPolys()
@@ -168,10 +167,12 @@ export function Projectron(canvas, size) {
 		drawData(scratchFB, perspective, null)
 		var score = compareFBOs(referenceFB, scratchFB)
 		var keep = (score > currentScore)
-		// prefer to keep change when poly has been removed with minimal effect?
-		if (polys.getNumVerts() < vertCount) {
-			keep = (score >= currentScore - keepFewerPolysTolerance)
+
+		// prefer to remove polys even if score drop is within tolerance
+		if (!keep && polys.getNumVerts() < vertCount) {
+			if (score > currentScore - fewerPolysTolerance) keep = true
 		}
+
 		if (keep) {
 			currentScore = score
 		} else {

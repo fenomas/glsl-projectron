@@ -132,13 +132,7 @@ var setAlpha = () => proj.setAlphaRange(minAlpha, maxAlpha)
 setupInput('minAlpha', val => { minAlpha = parseFloat(val); setAlpha() })
 setupInput('maxAlpha', val => { maxAlpha = parseFloat(val); setAlpha() })
 setupInput('adjust', val => { proj.setAdjustAmount(parseFloat(val) || 0.5) })
-
-setupInput('fewerPolys', val => {
-    var ind = $('fewerPolys').selectedIndex
-    var tols = [0, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1]
-    proj.setFewerPolysTolerance(tols[ind])
-})
-
+setupInput('preferFewer', val => { proj.setFewerPolyTolerance(parseFloat(val) || 0) })
 
 $('export').addEventListener('click', ev => {
     var dat = proj.exportData()

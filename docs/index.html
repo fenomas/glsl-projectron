@@ -105,16 +105,10 @@
                 <option>100</option>
             </select> generations per frame
         </label>
-
-        <label><select id='fewerPolys'>
-                <option selected='true'>Don't</option>
-                <option>Slightly</option>
-                <option>Kinda</option>
-                <option>Somewhat</option>
-                <option>Moderately</option>
-                <option>Strongly</option>
-            </select> prefer fewer polys
-        </label>
+        <label><input class='txt' id='preferFewer' value='0.001'> Fewer polys tolerance</label>
+        <span style="font-size: smaller;">
+            (score tolerance within which to drop polygons)
+        </span>
 
         <div class='sep'></div>
 

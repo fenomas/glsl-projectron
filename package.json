@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "start": "cd demo; webpack-dev-server",
-    "build": "cd demo; webpack --env.production"
+    "build": "cd demo; export NODE_OPTIONS=--openssl-legacy-provider; webpack --env.production"
   },
   "dependencies": {
     "game-shell": "github:mikolalysenko/game-shell",
